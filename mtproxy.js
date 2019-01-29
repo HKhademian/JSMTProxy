@@ -1,4 +1,8 @@
 const net = require('net');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const crypto = require('crypto');
 const exec = require('child_process').exec;
 const process = require('process');
@@ -135,10 +139,8 @@ setInterval(() => {
 	}
 }, 20);
 
-net.createServer(function(socket) {
 
-	socket.setTimeout(CON_TIMEOUT);
-
+io.on('connection', (socket) => {
 	socket.on('error', (err) => {
 		console.log('socket error: ', err)
 		socket.destroy();
@@ -149,15 +151,28 @@ net.createServer(function(socket) {
 		socket.destroy();
 	});
 
-	socket.on('end', function() {
+	socket.on('end', () => {
 		console.log('socket end')
 		if (socket.server_socket != null) {
 			socket.server_socket.destroy();
 		}
 	});
 
-	socket.on('data', function(data) {
+	socket.on('close', () => {
+		console.log('socket close')
+		if (socket.server_socket != null) {
+			socket.server_socket.destroy();
+		}
+	});
 
+	socket.on('disconnect', () => {
+		console.log('socket disconnect')
+		if (socket.server_socket != null) {
+			socket.server_socket.destroy();
+		}
+	});
+
+	socket.on('data', (data) => {
 		if (socket.init == null && (data.length == 41 || data.length == 56)) {
 			let client_ip = socket.remoteAddress.substr(7, socket.remoteAddress.length);
 			socket.destroy();
@@ -249,8 +264,9 @@ net.createServer(function(socket) {
 			socket.destroy();
 		}
 	});
+});
 
-}).listen(PORT, (err) => {
+http.listen(PORT, (err) => {
   if (err) return console.log('something bad happened', err)
 
   console.log(`socket is listening on ${PORT}`)

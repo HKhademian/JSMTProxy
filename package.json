@@ -4,5 +4,10 @@
   "scripts": {
     "start": "node test.js",
     "start2": "node mtproxy.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0",
+    "ws": "^6.1.3"
   }
 }
