@@ -158,6 +158,16 @@ io.on('connection', (socket) => {
 		}
 	});
 
+	socket.on('ping', () => {
+		console.log('socket ping')
+		socket.emit('pong');
+	});
+
+	socket.on('news', (data) => {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
 	socket.on('close', () => {
 		console.log('socket close')
 		if (socket.server_socket != null) {
