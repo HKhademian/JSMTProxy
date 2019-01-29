@@ -3,6 +3,7 @@ const PORT = process.env.PORT || 3000
 
 const server = http.createServer((request, response) => {
   // console.log(request.url)
+	var cache = [];
   response.end(JSON.stringify({
   	hello: 'World!',
   	request: request,
