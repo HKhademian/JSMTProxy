@@ -1,4 +1,5 @@
 const net = require('net');
+const http = require('http');
 const WebSocket = require('ws');
 
 const crypto = require('crypto');
@@ -30,7 +31,8 @@ const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const PORT = process.env.PORT || configObj.port;
 const SECRET = process.env.SECRET || configObj.secret;
 
-const wss = new WebSocket.Server({ port: PORT })
+const server = http.createServer()
+const wss = new WebSocket.Server({ server })
 
 function reverseInplace (buffer) {
   for (var i = 0, j = buffer.length - 1; i < j; ++i, --j) {
@@ -277,3 +279,10 @@ wss.on('connection', (socket) => {
 		}
 	});
 });
+
+server.listen(PORT, (err) => {
+  if (err) return console.log('something bad happened', err)
+
+  console.log(`server is listening on ${PORT}`)
+})
+console.log(`port is: ${PORT}`)
