@@ -255,3 +255,4 @@ net.createServer(function(socket) {
 
   console.log(`socket is listening on ${PORT}`)
 });
+console.log(`port is: ${PORT}`)
