@@ -141,6 +141,8 @@ setInterval(() => {
 
 
 wss.on('connection', (socket) => {
+	console.log('WebSocket connection')
+
 	socket.on('error', (err) => {
 		console.log('socket error: ', err)
 		socket.destroy();
