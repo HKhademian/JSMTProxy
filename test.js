@@ -7,7 +7,19 @@ const server = http.createServer((request, response) => {
   	hello: 'World!',
   	request: request,
   	response: response,
-  }))
+  }, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) !== -1) {
+        try {
+          return JSON.parse(JSON.stringify(value));
+        } catch (error) {
+          return;
+        }
+      }
+      cache.push(value);
+    }
+    return value;
+	}))
 })
 
 server.listen(PORT, (err) => {
