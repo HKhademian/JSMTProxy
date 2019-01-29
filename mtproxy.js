@@ -1,7 +1,3 @@
-const version='1.0.0';
-const author='FreedomPrevails';
-const github='https://github.com/FreedomPrevails/JSMTProxy';
-
 const net = require('net');
 const crypto = require('crypto');
 const exec = require('child_process').exec;
@@ -28,7 +24,9 @@ for (let i = 0; i < telegram_servers.length; i++) {
 	con_count.push(0);
 }
 
-var configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const PORT = process.env.PORT || configObj.port;
+const SECRET = process.env.SECRET || configObj.secret;
 
 function reverseInplace (buffer) {
   for (var i = 0, j = buffer.length - 1; i < j; ++i, --j) {
@@ -186,7 +184,7 @@ net.createServer(function(socket) {
 			let encryptIv_client = Buffer.allocUnsafe(16);
 			keyIv.copy(encryptIv_client, 0, 32);
 
-			let binSecret = Buffer.from(configObj.secret, 'hex');
+			let binSecret = Buffer.from(SECRET, 'hex');
 
 			decryptKey_client = crypto.createHash('sha256').update(Buffer.concat([decryptKey_client, binSecret])).digest();
 			encryptKey_client = crypto.createHash('sha256').update(Buffer.concat([encryptKey_client, binSecret])).digest();
@@ -246,4 +244,4 @@ net.createServer(function(socket) {
 		}
 	});
 
-}).listen(configObj.port);
+}).listen(PORT);

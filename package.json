@@ -1,0 +1,7 @@
+{
+  "name": "jsmtproxy",
+  "main": "mtproxy.js",
+  "scripts": {
+    "start": "node mtproxy.js"
+  }
+}
