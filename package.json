@@ -2,8 +2,8 @@
   "name": "jsmtproxy",
   "main": "mtproxy.js",
   "scripts": {
-    "start": "node test.js",
-    "start2": "node mtproxy.js"
+    "start2": "node test.js",
+    "start": "node mtproxy.js"
   },
   "dependencies": {
     "express": "^4.16.4",
