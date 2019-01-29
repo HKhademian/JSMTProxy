@@ -1,7 +1,4 @@
 const net = require('net');
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
 
 const crypto = require('crypto');
 const exec = require('child_process').exec;
@@ -139,8 +136,9 @@ setInterval(() => {
 	}
 }, 20);
 
+const wss = new WebSocket.Server({ port: POST })
 
-io.on('connection', (socket) => {
+wss.on('connection', (socket) => {
 	socket.on('error', (err) => {
 		console.log('socket error: ', err)
 		socket.destroy();
@@ -275,10 +273,3 @@ io.on('connection', (socket) => {
 		}
 	});
 });
-
-http.listen(PORT, (err) => {
-  if (err) return console.log('something bad happened', err)
-
-  console.log(`socket is listening on ${PORT}`)
-});
-console.log(`port is: ${PORT}`)
