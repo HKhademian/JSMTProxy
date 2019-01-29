@@ -45,6 +45,7 @@ function create_idle_server(id, ip) {
 	});
 
 	client.connect(443, ip, () => {
+		console.log('connecting to ip #', ip)
 		client.session = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 		let random_buf = crypto.randomBytes(64);
@@ -93,6 +94,7 @@ function create_idle_server(id, ip) {
 	});
 
 	client.on('error', (err) => {
+		console.log('mtp err: ', err)
 		client.destroy();
 	});
 
@@ -107,6 +109,7 @@ function create_idle_server(id, ip) {
 		}
 	});
 	client.on('end', () => {
+		console.log('mtp end')
 		if (client.client_socket != null) {
 			client.client_socket.end();
 		}
@@ -137,14 +140,17 @@ net.createServer(function(socket) {
 	socket.setTimeout(CON_TIMEOUT);
 
 	socket.on('error', (err) => {
+		console.log('socket error: ', err)
 		socket.destroy();
 	});
 
 	socket.on('timeout', () => {
+		console.log('socket timeout')
 		socket.destroy();
 	});
 
 	socket.on('end', function() {
+		console.log('socket end')
 		if (socket.server_socket != null) {
 			socket.server_socket.destroy();
 		}
