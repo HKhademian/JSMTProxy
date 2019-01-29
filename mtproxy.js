@@ -10,8 +10,6 @@ const CON_TIMEOUT = 5 * 60000; //5 Mins
 const REPORT_CON_SEC = 10;
 const MIN_IDLE_SERVERS = 4;
 
-const wss = new WebSocket.Server({ port: PORT })
-
 exec('/usr/bin/prlimit --pid ' + process.pid + ' --nofile=81920:81920', (error, stdout, stderr) => {});
 
 var client_cons = [];
@@ -31,6 +29,8 @@ for (let i = 0; i < telegram_servers.length; i++) {
 const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const PORT = process.env.PORT || configObj.port;
 const SECRET = process.env.SECRET || configObj.secret;
+
+const wss = new WebSocket.Server({ port: PORT })
 
 function reverseInplace (buffer) {
   for (var i = 0, j = buffer.length - 1; i < j; ++i, --j) {
