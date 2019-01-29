@@ -1,7 +1,4 @@
 const net = require('net');
-const http = require('http');
-const WebSocket = require('ws');
-
 const crypto = require('crypto');
 const exec = require('child_process').exec;
 const process = require('process');
@@ -30,10 +27,7 @@ for (let i = 0; i < telegram_servers.length; i++) {
 const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || configObj.port || 8080;
 const IP = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || configObj.ip || '0.0.0.0';
-const SECRET = process.env.SECRET || configObj.secret;
-
-const server = http.createServer()
-const wss = new WebSocket.Server({ server })
+const SECRET = process.env.SECRET || configObj.secret || '00000000000000000000000000000000';
 
 function reverseInplace (buffer) {
   for (var i = 0, j = buffer.length - 1; i < j; ++i, --j) {
@@ -142,9 +136,9 @@ setInterval(() => {
 	}
 }, 20);
 
+net.createServer(function(socket) {
 
-wss.on('connection', (socket) => {
-	console.log('WebSocket connection')
+	socket.setTimeout(CON_TIMEOUT);
 
 	socket.on('error', (err) => {
 		console.log('socket error: ', err)
@@ -156,38 +150,15 @@ wss.on('connection', (socket) => {
 		socket.destroy();
 	});
 
-	socket.on('end', () => {
+	socket.on('end', function() {
 		console.log('socket end')
 		if (socket.server_socket != null) {
 			socket.server_socket.destroy();
 		}
 	});
 
-	socket.on('ping', () => {
-		console.log('socket ping')
-		socket.emit('pong');
-	});
+	socket.on('data', function(data) {
 
-	socket.on('news', (data) => {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
-
-	socket.on('close', () => {
-		console.log('socket close')
-		if (socket.server_socket != null) {
-			socket.server_socket.destroy();
-		}
-	});
-
-	socket.on('disconnect', () => {
-		console.log('socket disconnect')
-		if (socket.server_socket != null) {
-			socket.server_socket.destroy();
-		}
-	});
-
-	socket.on('data', (data) => {
 		if (socket.init == null && (data.length == 41 || data.length == 56)) {
 			let client_ip = socket.remoteAddress.substr(7, socket.remoteAddress.length);
 			socket.destroy();
@@ -279,11 +250,10 @@ wss.on('connection', (socket) => {
 			socket.destroy();
 		}
 	});
-});
 
-server.listen(PORT, IP, (err) => {
+}).listen(PORT, IP, (err) => {
   if (err) return console.log('something bad happened', err)
 
   console.log(`server is listening on ${IP}:${PORT}`)
-})
+});
 console.log(`address is: ${IP}:${PORT}`)
