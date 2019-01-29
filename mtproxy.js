@@ -10,7 +10,7 @@ const CON_TIMEOUT = 5 * 60000; //5 Mins
 const REPORT_CON_SEC = 10;
 const MIN_IDLE_SERVERS = 4;
 
-const wss = new WebSocket.Server({ port: POST })
+const wss = new WebSocket.Server({ port: PORT })
 
 exec('/usr/bin/prlimit --pid ' + process.pid + ' --nofile=81920:81920', (error, stdout, stderr) => {});
 
