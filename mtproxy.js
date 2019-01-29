@@ -250,4 +250,8 @@ net.createServer(function(socket) {
 		}
 	});
 
-}).listen(PORT);
+}).listen(PORT, (err) => {
+  if (err) return console.log('something bad happened', err)
+
+  console.log(`socket is listening on ${PORT}`)
+});

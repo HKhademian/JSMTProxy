@@ -2,6 +2,7 @@
   "name": "jsmtproxy",
   "main": "mtproxy.js",
   "scripts": {
-    "start": "node mtproxy.js"
+    "start": "node test.js",
+    "start2": "node mtproxy.js"
   }
 }
