@@ -29,7 +29,7 @@ for (let i = 0; i < telegram_servers.length; i++) {
 
 const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || configObj.port || 8080;
-const PORT = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || configObj.ip || '0.0.0.0';
+const IP = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || configObj.ip || '0.0.0.0';
 const SECRET = process.env.SECRET || configObj.secret;
 
 const server = http.createServer()
