@@ -1,4 +1,5 @@
 const net = require('net');
+const WebSocket = require('ws');
 
 const crypto = require('crypto');
 const exec = require('child_process').exec;
@@ -8,6 +9,8 @@ const fs = require('fs');
 const CON_TIMEOUT = 5 * 60000; //5 Mins
 const REPORT_CON_SEC = 10;
 const MIN_IDLE_SERVERS = 4;
+
+const wss = new WebSocket.Server({ port: POST })
 
 exec('/usr/bin/prlimit --pid ' + process.pid + ' --nofile=81920:81920', (error, stdout, stderr) => {});
 
@@ -136,7 +139,6 @@ setInterval(() => {
 	}
 }, 20);
 
-const wss = new WebSocket.Server({ port: POST })
 
 wss.on('connection', (socket) => {
 	socket.on('error', (err) => {
