@@ -28,7 +28,8 @@ for (let i = 0; i < telegram_servers.length; i++) {
 }
 
 const configObj = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-const PORT = process.env.PORT || configObj.port;
+const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || configObj.port || 8080;
+const PORT = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || configObj.ip || '0.0.0.0';
 const SECRET = process.env.SECRET || configObj.secret;
 
 const server = http.createServer()
@@ -280,9 +281,9 @@ wss.on('connection', (socket) => {
 	});
 });
 
-server.listen(PORT, (err) => {
+server.listen(PORT, IP, (err) => {
   if (err) return console.log('something bad happened', err)
 
-  console.log(`server is listening on ${PORT}`)
+  console.log(`server is listening on ${IP}:${PORT}`)
 })
-console.log(`port is: ${PORT}`)
+console.log(`address is: ${IP}:${PORT}`)
